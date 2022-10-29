@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="sazaynukov" id="29.10.22_15.29_init-1">
+        <preConditions>
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(64)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="enabled" type="boolean"/>
+            <column name="version" type="integer"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="sazaynukov" id="29.10.22_15.29_init-2">
+        <preConditions>
+            <tableExists tableName="users"/>
+        </preConditions>
+        <createIndex tableName="users" indexName="users__login_enabled_ind">
+            <column name="login"/>
+            <column name="enabled"/>
+        </createIndex>
+        <rollback>
+            <dropIndex tableName="users" indexName="users__login_enabled_ind"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
